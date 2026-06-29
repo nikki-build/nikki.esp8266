@@ -88,10 +88,18 @@ protected:
     Serial.println(details);
   }
 
-  void onMessage(const JsonVariant &message) override
+void onData(const JsonObject &message) override
   {
     Serial.println("[nikki Playground] Received:");
     serializeJsonPretty(message, Serial);
+    Serial.println();
+  }
+
+  void onResponseData(const JsonObject &msg)
+  {
+    // User will override this if needed
+    Serial.print("Received response message: ");
+    serializeJsonPretty(msg, Serial);
     Serial.println();
   }
 };
@@ -120,7 +128,7 @@ void setup()
   // Start nikki connection
   nikki.begin();
   delay(1000);
-  Serial.println("Connecting to ws server...");
+  Serial.println("Connecting to nikki server...");
 }
 
 void loop()

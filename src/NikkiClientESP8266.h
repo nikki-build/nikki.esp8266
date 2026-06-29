@@ -44,14 +44,17 @@ public:
 protected:
   // ← User overrides these (no setOnXXX anymore)
   virtual void onStatus(const String &status, const String &details);
-  virtual void onMessage(const JsonVariant &message);
-
+  virtual void onData(const JsonObject &msg);
+  virtual void onResponseData(const JsonObject &msg);
+  
 private:
   NikkiServiceDetails _serviceDetails;
   NikkiTokenDetails _tokenDetails;
   unsigned long _rateLimitMs;
   unsigned long _lastSendMs;
   WebSocketsClient _webSocket;
+
+  virtual void dispatchMessage(JsonObject &msg);
 
   // Internal helper methods (all private)
   void _fireStatus(const String &status, const String &details);

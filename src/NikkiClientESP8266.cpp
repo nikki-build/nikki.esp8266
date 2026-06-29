@@ -20,10 +20,44 @@ void nikkiServiceBase::onStatus(const String &status, const String &details)
   // User will override this if needed
 }
 
-void nikkiServiceBase::onMessage(const JsonVariant &message)
+void nikkiServiceBase::onData(const JsonObject &msg)
 {
   // User will override this if needed
+  Serial.print("Received data message: ");
 }
+
+void nikkiServiceBase::onResponseData(const JsonObject &msg)
+{
+  // User will override this if needed
+  Serial.print("Received response message: ");
+}
+
+void nikkiServiceBase::dispatchMessage(JsonObject &msg)
+{
+  String msgType = msg["msgType"] | "";
+
+  // Serial.println("[nikki Playground] Disptch:");
+  // serializeJsonPretty(msg, Serial);
+  // Serial.println();
+
+  if (msgType == "ServiceResponse")
+  {
+    onResponseData(msg);
+  }
+
+  else if (msgType == "ServiceData")
+  {
+    onData(msg);
+  }
+  else
+  {
+    Serial.print("Unknown message type: ");
+    Serial.println(msgType);
+
+    // onData(msg);
+  }
+}
+
 
 // --- Begin ---
 void nikkiServiceBase::begin()
